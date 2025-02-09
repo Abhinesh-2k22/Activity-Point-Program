@@ -1,0 +1,14 @@
+PS E:\abhi\programming\Activity Point Program\frontend> npm create vite@latest .
+npm install
+npm run dev
+PS E:\abhi\programming\Activity Point Program> npm init -y
+PS E:\abhi\programming\Activity Point Program> npm install express mongoose jsonwebtoken bcryptjs dotenv cors cookie-parser
+PS E:\abhi\programming\Activity Point Program> npm i -D nodemon
+
+
+create a file named ".env" in the root directory and paste these
+
+    MONGO_URI = mongodb+srv://22n201:pYe3s7RFdqfz4dJt@cluster0.qmz2w.mongodb.net/APP?retryWrites=true&w=majority&appName=Cluster0
+
+    JWT_SECRET = 22n201+Agilan-22n205@akshay=AS--22N214+!nithya!!22n232
+
