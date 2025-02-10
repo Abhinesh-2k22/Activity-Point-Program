@@ -4,7 +4,7 @@ import { generateTokenandSetCookie } from '../lib/utils/generateToken.js';
 
 export const signup = async (req, res) => {
     try {
-        const { name, email, password, role } = req.body;
+        const { name, email, password, phone, role ,address,pincode} = req.body;
 
         const emailRegex = /\S+@\S+\.\S+/;
         if (!emailRegex.test(email)) {
@@ -19,13 +19,24 @@ export const signup = async (req, res) => {
                 message: "User already exists",
             });
         }
+
+        const samephone = await User.findOne({ phone });
+        if (samephone) {
+            return res.status(400).json({
+                message: "Phone number already exists",
+            });
+        }
+        
         const salt = bcrypt.genSaltSync(10);
         const hashedpass = bcrypt.hashSync(password, salt);
         const newUser = new User({
             name:name,
             email:email,
             password: hashedpass,
+            phone:phone,
             role:role,
+            address:address,
+            pincode:pincode
         });
 
         if(newUser){
@@ -35,7 +46,10 @@ export const signup = async (req, res) => {
                 id: newUser._id,
                 name: newUser.name,
                 email: newUser.email,
+                phone: newUser.phone,
                 role: newUser.role,
+                address: newUser.address,
+                pincode: newUser.pincode
             });
 
         }

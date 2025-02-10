@@ -8,7 +8,7 @@ const RentingSchema = new mongoose.Schema({
     advanceAmount: { type: Number, required: true, min: 0 },
     description: { type: String, required: true},
     address: { type: String, required: true },
-    location : { type: String, required: true },
+    pincode : { type: String, required: true },
     image: { type: String, required: true }, // Image file path
 
   }, { timestamps: true });
