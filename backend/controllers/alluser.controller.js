@@ -1,6 +1,9 @@
 import Renting from "../models/renting.model.js";
 import Grocery from "../models/grocery.model.js";
-
+import Service from "../models/service.model.js";
+import Saloon from "../models/saloon.model.js";
+import mongoose from "mongoose";
+import moment from "moment-timezone";
 //renting
 export const dishouse = async (req, res) => {
     try {
@@ -118,3 +121,196 @@ export const deletemygrocery = async (req, res) => {
         res.status(404).json({ message: error.message });
     }
 }
+
+//service provider
+export const addservice = async (req, res) => {
+    const service = req.body;
+    service.phoneNumber = req.user.phone;
+    service.email = req.user.email;
+    const newservice = new Service(service);
+    try {
+        await newservice.save();
+        res.status(201).json(newservice);
+    } catch (error) {
+        res.status(409).json({ message: error.message });
+    }
+}
+
+export const getallservice = async (req, res) => {
+    try {
+        const allservice = await Service.find();
+        res.status(200).json(allservice);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+
+export const myservice = async (req, res) => {
+    try {
+        const myservice = await Service.find({ email: req.user.email });
+        res.status(200).json(myservice);
+    }
+    catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}     
+export const updatemyservice = async (req, res) => {
+    const {id} = req.params;
+    const service = req.body;
+    try {
+        const updatedservice=await Service.findByIdAndUpdate(id, service, { new: true });
+        res.status(200).json(updatedservice);
+    }
+    catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+export const deletemyservice = async (req, res) => {
+    const {id} = req.params;
+    try {
+        await Service.findOneAndDelete(id);
+        res.status(200).json({ message: "Service deleted successfully" });
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+
+
+
+//saloon
+
+export const getallsaloon = async (req, res) => {
+    try {
+        const allsaloon = await Saloon.find();
+        res.status(200).json(allsaloon);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+};
+
+export const addsaloon = async (req, res) => {
+    try {
+        const saloon = req.body;
+        saloon.phoneNumber = req.user.phone;
+        saloon.email = req.user.email;
+        
+        // Ensure default structure for availableTimings
+        saloon.availableTimings = req.body.availableTimings
+
+        const newsaloon = new Saloon(saloon);
+        await newsaloon.save();
+        res.status(201).json(newsaloon);
+    } catch (error) {
+        res.status(409).json({ message: error.message });
+    }
+};
+
+// Get saloon details for the logged-in user
+export const mysaloon = async (req, res) => {
+    try {
+        const mysaloon = await Saloon.find({ email: req.user.email });
+        res.status(200).json(mysaloon);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+};
+
+// Update saloon details
+export const updatemysaloon = async (req, res) => {
+    const { id } = req.params;
+    const saloon = req.body;
+    try {
+        const updatedsaloon = await Saloon.findByIdAndUpdate(id, saloon, { new: true });
+        res.status(200).json(updatedsaloon);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+};
+
+// Delete saloon
+export const deletemysaloon = async (req, res) => {
+    const { id } = req.params;
+    try {
+        await Saloon.findByIdAndDelete(id);
+        res.status(200).json({ message: "Saloon deleted successfully" });
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+};
+
+// Book an appointment 
+export const bookAppointment = async (req, res) => {
+    try {
+        const { customerName, customerPhone, time } = req.body;
+        const saloonId = req.params.id;
+        if (!mongoose.Types.ObjectId.isValid(saloonId)) {
+            return res.status(400).json({ message: "Invalid Saloon ID" });
+        }
+        const now = moment().tz("Asia/Kolkata");
+        const today = now.format("YYYY-MM-DD");
+        const currentTime = now.format("hh:mm A");
+
+        const saloon = await Saloon.findById(saloonId);
+        if (!saloon) return res.status(404).json({ message: "Saloon not found" });
+        const lastUpdatedDate = moment(saloon.lastUpdated).tz("Asia/Kolkata").format("YYYY-MM-DD");
+        if (lastUpdatedDate !== today) {
+            saloon.availableTimings = []; 
+            saloon.lastUpdated = new Date(); 
+            await saloon.save();
+        }
+
+        if (!Array.isArray(saloon.availableTimings) || saloon.availableTimings.length === 0) {
+            return res.status(400).json({ message: "No available slots for today" });
+        }
+        if (!saloon.availableTimings.includes(time)) {
+            return res.status(400).json({ message: "Selected time slot is not available" });
+        }
+        if (moment(time, "hh:mm A").isBefore(moment(currentTime, "hh:mm A"))) {
+            return res.status(400).json({ message: "Cannot book a past time slot" });
+        }
+        saloon.availableTimings = saloon.availableTimings.filter(slot => slot !== time);
+        saloon.bookedAppointments.push({ customerName, customerPhone, date: today, time });
+        await saloon.save();
+
+        res.status(200).json({ message: "Appointment booked successfully" });
+    } catch (error) {
+        console.error("Error booking appointment:", error);
+        res.status(500).json({ message: "Internal server error", error: error.message });
+    }
+};
+
+export const getAvailableSlots = async (req, res) => {
+    try {
+        const { id } = req.params; 
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message: "Invalid Saloon ID" });
+        }
+
+        // Find the saloon by ID
+        const saloon = await Saloon.findById(id);
+        if (!saloon) return res.status(404).json({ message: "Saloon not found" });
+
+        // Get current time and today's date
+        const now = moment().tz("Asia/Kolkata");
+        const today = now.format("YYYY-MM-DD");
+        const currentTime = now.format("hh:mm A"); // Get current time in 12-hour format (e.g., "04:00 PM")
+
+        // Check if lastUpdated is from a previous day, clear timings if needed
+        const lastUpdatedDate = moment(saloon.lastUpdated).tz("Asia/Kolkata").format("YYYY-MM-DD");
+        if (lastUpdatedDate !== today) {
+            saloon.availableTimings = []; // Reset available timings
+            saloon.lastUpdated = now.toDate(); // Update timestamp
+            await saloon.save();
+        }
+
+        // Filter out past time slots
+        const filteredTimings = saloon.availableTimings.filter(time => {
+            return moment(time, "hh:mm A").isAfter(moment(currentTime, "hh:mm A"));
+        });
+
+        res.status(200).json({ availableTimings: filteredTimings });
+    } catch (error) {
+        console.error("Error fetching available slots:", error);
+        res.status(500).json({ message: "Internal server error", error: error.message });
+    }
+};
