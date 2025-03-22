@@ -65,12 +65,14 @@ export const signin = async (req, res) => {
     try{
         const { email, password } = req.body;
         const user =await User.findOne({ email });
+
         if (!user) {
             return res.status(400).json({
                 message: "User does not exist",
             });
         }
-        const validpass = bcrypt.compare(password, user?.password || '');
+        const validpass = await bcrypt.compare(password, user?.password || '');
+
         if (!validpass) {
             return res.status(400).json({
                 message: "Invalid Password",
