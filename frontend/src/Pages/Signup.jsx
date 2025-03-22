@@ -1,6 +1,8 @@
 import React from 'react'
+import { Link,useNavigate } from 'react-router-dom'
 
 const Signup = () => {
+  const navigate = useNavigate();
   const [signupData, setSignupData] = React.useState({
     name: '',
     email: '',
@@ -26,6 +28,7 @@ const Signup = () => {
       if (response.ok) {
         console.log('Signup successful:', data)
         alert('Signup successful')
+        navigate('/signin');
       } else {
         console.error('Signup failed:', data.message)
         alert(data.message || 'Signup failed')
