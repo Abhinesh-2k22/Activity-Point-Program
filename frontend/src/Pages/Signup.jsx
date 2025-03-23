@@ -20,7 +20,8 @@ const Signup = () => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(signupData)
+        body: JSON.stringify(signupData),
+        credentials: 'include'
       })
 
       const data = await response.json()

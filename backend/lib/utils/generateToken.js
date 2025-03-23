@@ -5,9 +5,12 @@ export const generateTokenandSetCookie = (user,res) => {
         expiresIn: '15d',
     });
     res.cookie('jwt', token, { 
-        maxage: 15 * 24 * 60 * 60 * 1000,
-         httpOnly: true
+         maxage: 15 * 24 * 60 * 60 * 1000,
+         httpOnly: true,
+         secure: false,       
+         sameSite: 'Lax',
     });
+    
     
     return token;
 }

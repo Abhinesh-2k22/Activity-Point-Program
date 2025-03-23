@@ -1,15 +1,19 @@
 // While using navbar and signout,if you try to comeback it coming back to the landing page.
 import React from 'react'
 import Navbar from './Navbar'
+import { Link,useNavigate } from 'react-router-dom';
 
 const Landingpage = () => {
+  const navigate = useNavigate();
   return (
     <div>
       <Navbar/>
       <h1>landing Page</h1>
+      {/* abhi */}
       <button>grocery</button>
+      <Link to ='/getrenting'>renting</Link>
+      {/* akshay */}
       <button>saloon</button>
-      <button>renting</button>
       <button>service</button>
     </div>
   )

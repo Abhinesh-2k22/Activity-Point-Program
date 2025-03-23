@@ -1,6 +1,7 @@
 import User from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
 import { generateTokenandSetCookie } from '../lib/utils/generateToken.js';
+import jwt from 'jsonwebtoken';
 
 export const signup = async (req, res) => {
     try {
@@ -104,3 +105,30 @@ export const signout = (req, res) => {
         });
     }
 };
+
+
+export const getcookie = async (req, res) => {
+    try {
+      const token = req.cookies.jwt
+      if (!token) {
+        return res.status(400).json({ message: "No cookie found" })
+      }
+  
+      const decoded = jwt.verify(token, process.env.JWT_SECRET)
+  
+      // Fetch user from DB using decoded._id
+      const user = await User.findById(decoded._id).select('-password')  // hide password
+  
+      if (!user) {
+        return res.status(404).json({ message: "User not found" })
+      }
+  
+      res.status(200).json({
+        message: "Cookie found",
+        user,
+      })
+    } catch (err) {
+      console.error(err)
+      res.status(400).json({ message: "Something went wrong" })
+    }
+  }

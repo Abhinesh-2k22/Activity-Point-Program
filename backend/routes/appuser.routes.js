@@ -10,10 +10,7 @@ import { addservice,getallservice,myservice,updatemyservice,deletemyservice} fro
 import {serviceprotectRoute} from '../middleware/serviceprotectRoute.js';
 import { salooncheckRoute } from '../middleware/salooncheckRoute.js';
 
-
-
 const router = express.Router();
-
 //renting
 router.get('/renthouse',protectRoute,dishouse);
 router.post('/addhouse',rentingprotectRoute,addhouse);
