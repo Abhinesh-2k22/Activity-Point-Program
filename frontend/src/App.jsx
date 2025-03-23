@@ -6,6 +6,7 @@ import Signup from './Pages/Signup'
 import Landingpage from './Pages/Landingpage'
 import Getrentinghouse from './Pages/Getrentinghouse'
 import GetserviceProvider from './Pages/GetserviceProvider'
+import GroceryPage from './Pages/GroceryPage'
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
           <Route path='/landingPage' Component={Landingpage}/>
           <Route path='/getrenting' Component={Getrentinghouse}/>
           <Route path='/getservice' Component={GetserviceProvider}/>
+          <Route path="/grocery" Component={GroceryPage} />
         </Routes>  
       </div>
     </Router>

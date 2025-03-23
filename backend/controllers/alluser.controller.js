@@ -76,6 +76,7 @@ export const addgrocery = async (req, res) => {
 
 export const getallgrocery =async (req, res) => {
     const { category } = req.params;
+    console.log("Category requested:", category);
     try {
         if(category !== "all" && category !== "null"){ {
         const allgrocery = await Grocery.find({ category: category });

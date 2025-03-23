@@ -19,7 +19,7 @@ router.put('/updatehouse/:id',rentingcheckroute ,updatemyhouse);
 router.delete('/deletehouse/:id',rentingcheckroute ,deletemyhouse);
 
 //grocery
-router.get('/grocery/:category',protectRoute,getallgrocery);
+router.get('/grocery/:category',getallgrocery);
 router.post('/addgrocery',groceryprotectRoute,addgrocery);
 router.get('/mygrocery',groceryprotectRoute,mygrocery);
 router.put('/updategrocery/:id',groceryprotectRoute,updatemygrocery);

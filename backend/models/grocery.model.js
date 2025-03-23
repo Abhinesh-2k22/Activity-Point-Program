@@ -8,7 +8,7 @@ const GrocerySchema = new mongoose.Schema({
         type: String,
         enum:["fruits&Vegetables","dairy","pantrystaples","snack","beverages","personalcare"],
         required: true },
-    email: { type: String, required: true, unique: true },
+    email: { type: String, required: true},
     description: { type: String, required: true},
     image: { type: String, required: true }, // Image file path
     shopName: { type: String, required: true },
