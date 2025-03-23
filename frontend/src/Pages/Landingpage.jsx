@@ -10,7 +10,7 @@ const Landingpage = () => {
       <Navbar/>
       <h1>landing Page</h1>
       {/* abhi */}
-      <button>grocery</button>
+      <Link to ='/grocery'>grocery</Link>
       <Link to ='/getrenting'>renting</Link>
       {/* akshay */}
       <button>saloon</button>
