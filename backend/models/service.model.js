@@ -10,7 +10,7 @@ const ServiceSchema = new mongoose.Schema({
         type: String,
         enum:["Plumber","Electrician","Carpenter","Mechanic"],
         required: true },
-    email: { type: String, required: true, unique: true }
+    email: { type: String, required: true}
   }, { timestamps: true });
 
 const Service = mongoose.model("Service", ServiceSchema);

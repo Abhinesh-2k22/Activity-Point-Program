@@ -14,7 +14,7 @@ const Landingpage = () => {
       <Link to ='/getrenting'>renting</Link>
       {/* akshay */}
       <button>saloon</button>
-      <button>service</button>
+      <Link to ='/getservice'>Service</Link>
     </div>
   )
 }

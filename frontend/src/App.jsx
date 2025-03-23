@@ -5,6 +5,7 @@ import Signin from './Pages/Signin'
 import Signup from './Pages/Signup'
 import Landingpage from './Pages/Landingpage'
 import Getrentinghouse from './Pages/Getrentinghouse'
+import GetserviceProvider from './Pages/GetserviceProvider'
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
           <Route path='/signup' Component={Signup}/>
           <Route path='/landingPage' Component={Landingpage}/>
           <Route path='/getrenting' Component={Getrentinghouse}/>
+          <Route path='/getservice' Component={GetserviceProvider}/>
         </Routes>  
       </div>
     </Router>

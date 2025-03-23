@@ -166,14 +166,27 @@ export const updatemyservice = async (req, res) => {
     }
 }
 export const deletemyservice = async (req, res) => {
-    const {id} = req.params;
+    const { id } = req.params;
+    const userEmail = req.user.email; // Get logged-in user's email
+
     try {
-        await Service.findOneAndDelete(id);
+        const service = await Service.findOne({ _id: id });
+
+        if (!service) {
+            return res.status(404).json({ message: "Service not found" });
+        }
+
+        if (service.email !== userEmail) {
+            return res.status(403).json({ message: "Unauthorized! You can only delete your own service" });
+        }
+
+        await Service.findByIdAndDelete(id);
         res.status(200).json({ message: "Service deleted successfully" });
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
-}
+};
+
 
 
 
