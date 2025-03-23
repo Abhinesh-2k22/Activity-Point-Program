@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const RentingSchema = new mongoose.Schema({
     name: { type: String, required: true},
-    email: { type: String, required: true, unique: true },
+    email: { type: String, required: true },
     phoneNumber: { type: String, required: true, match: [/^\d{10}$/, "Invalid phone number"] },
     rentPerMonth: { type: Number, required: true, min: 0 },
     advanceAmount: { type: Number, required: true, min: 0 },

@@ -34,7 +34,7 @@ const Navbar = () => {
     <div>
       <div>
         <nav>
-          <Link to='/'>Home</Link>
+          <Link to='/landingPage'>Home</Link>
           <div onClick={signout}>Signout</div>
         </nav>
       </div>
