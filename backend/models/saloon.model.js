@@ -6,7 +6,7 @@ const SaloonSchema = new mongoose.Schema({
     phoneNumber: { type: String, required: true },
     description: { type: String },
     image: { type: String },
-    email: { type: String, required: true, unique: true },
+    email: { type: String, required: true},
 
     availableTimings: {
         type: [String], // Stores time slots as an array of strings
