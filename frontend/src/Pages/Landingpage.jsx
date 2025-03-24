@@ -13,7 +13,7 @@ const Landingpage = () => {
       <Link to ='/grocery'>grocery</Link>
       <Link to ='/getrenting'>renting</Link>
       {/* akshay */}
-      <button>saloon</button>
+      <Link to ='/saloon'>Saloon</Link>
       <Link to ='/getservice'>Service</Link>
     </div>
   )

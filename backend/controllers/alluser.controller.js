@@ -207,9 +207,11 @@ export const addsaloon = async (req, res) => {
         const saloon = req.body;
         saloon.phoneNumber = req.user.phone;
         saloon.email = req.user.email;
-        
-        // Ensure default structure for availableTimings
-        saloon.availableTimings = req.body.availableTimings
+
+        // Ensure availableTimings is properly formatted
+        if (req.body.availableTimings && typeof req.body.availableTimings === "string") {
+            saloon.availableTimings = req.body.availableTimings.split(",").map(time => time.trim());
+        }
 
         const newsaloon = new Saloon(saloon);
         await newsaloon.save();
@@ -292,10 +294,11 @@ export const bookAppointment = async (req, res) => {
         res.status(500).json({ message: "Internal server error", error: error.message });
     }
 };
-
 export const getAvailableSlots = async (req, res) => {
     try {
-        const { id } = req.params; 
+        const { id } = req.params;
+        console.log("Saloon ID received:", id); // Debugging
+
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({ message: "Invalid Saloon ID" });
         }
@@ -304,23 +307,27 @@ export const getAvailableSlots = async (req, res) => {
         const saloon = await Saloon.findById(id);
         if (!saloon) return res.status(404).json({ message: "Saloon not found" });
 
+        console.log("Available timings before filtering:", saloon.availableTimings); // Debugging
+
         // Get current time and today's date
         const now = moment().tz("Asia/Kolkata");
         const today = now.format("YYYY-MM-DD");
-        const currentTime = now.format("hh:mm A"); // Get current time in 12-hour format (e.g., "04:00 PM")
+        const currentTime = now.format("HH:mm"); // Use 24-hour format for better comparison
 
-        // Check if lastUpdated is from a previous day, clear timings if needed
-        const lastUpdatedDate = moment(saloon.lastUpdated).tz("Asia/Kolkata").format("YYYY-MM-DD");
-        if (lastUpdatedDate !== today) {
-            saloon.availableTimings = []; // Reset available timings
-            saloon.lastUpdated = now.toDate(); // Update timestamp
+        // Ensure lastUpdated exists, reset if needed
+        if (!saloon.lastUpdated || moment(saloon.lastUpdated).tz("Asia/Kolkata").format("YYYY-MM-DD") !== today) {
+            console.log("Resetting available timings as lastUpdated is outdated or missing.");
+            saloon.availableTimings = []; // Reset
+            saloon.lastUpdated = now.toDate();
             await saloon.save();
         }
 
         // Filter out past time slots
         const filteredTimings = saloon.availableTimings.filter(time => {
-            return moment(time, "hh:mm A").isAfter(moment(currentTime, "hh:mm A"));
+            return moment(time, "hh:mm A").isAfter(moment(currentTime, "HH:mm"));
         });
+
+        console.log("Filtered timings:", filteredTimings); // Debugging
 
         res.status(200).json({ availableTimings: filteredTimings });
     } catch (error) {

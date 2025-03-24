@@ -148,7 +148,7 @@ const Home = () => {
             <div key={index} style={styles.card}>
               <h3>{service.title}</h3>
               <p>{service.desc}</p>
-              <Link to={service.link} style={styles.link}>Learn more →</Link>
+              <Link to={'/signin'} style={styles.link}>Learn more →</Link>
             </div>
           ))}
         </div>
@@ -164,7 +164,7 @@ const Home = () => {
 
       {/* Footer */}
       <footer style={styles.footer}>
-        <p>© 2025 Uni Hub - All Rights Reserved</p>
+        <p>© 2023-2025 UniHub - Activity Point Program</p>
       </footer>
 
     </div>

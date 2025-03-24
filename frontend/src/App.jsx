@@ -7,7 +7,7 @@ import Landingpage from './Pages/Landingpage'
 import Getrentinghouse from './Pages/Getrentinghouse'
 import GetserviceProvider from './Pages/GetserviceProvider'
 import GroceryPage from './Pages/GroceryPage'
-
+import SaloonPage from './Pages/SaloonPage'
 function App() {
 
   return (
@@ -22,6 +22,7 @@ function App() {
           <Route path='/getrenting' Component={Getrentinghouse}/>
           <Route path='/getservice' Component={GetserviceProvider}/>
           <Route path="/grocery" Component={GroceryPage} />
+          <Route path="/saloon" Component={SaloonPage} />
         </Routes>  
       </div>
     </Router>
