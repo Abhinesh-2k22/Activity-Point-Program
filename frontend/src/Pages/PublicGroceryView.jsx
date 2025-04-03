@@ -418,7 +418,7 @@ const PublicGroceryView = () => {
                     onClick={() => handleMoreInfo(item)}
                     className="more-info-btn"
                   >
-                    ℹ️ Store Details
+                     Store Details
                   </button>
                 </div>
               </div>
