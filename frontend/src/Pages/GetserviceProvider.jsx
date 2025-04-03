@@ -606,8 +606,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Navbar from './Navbar'; // Importing your existing Navbar
-
+import Navbar from './Navbar'; 
 const GetServiceProvider = () => {
   const [services, setServices] = useState([]);
   const [role, setRole] = useState('');
@@ -624,7 +623,6 @@ const GetServiceProvider = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [editId, setEditId] = useState(null);
   const [isFormVisible, setIsFormVisible] = useState(false);
-
   // CSS Styles
   const styles = {
     container: {
@@ -1008,7 +1006,7 @@ const GetServiceProvider = () => {
       description: '',
       image: '',
       category: '',
-      email: formData.email, // Keep the email since it's from the user profile
+      email: formData.email, 
     });
     setIsEditMode(false);
     setEditId(null);

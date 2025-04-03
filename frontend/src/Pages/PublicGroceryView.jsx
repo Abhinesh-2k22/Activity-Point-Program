@@ -321,7 +321,7 @@ const PublicGroceryView = () => {
 
   return (
     <div style={{
-      padding: "2rem",
+      padding: "5rem",
       maxWidth: "1200px",
       margin: "0 auto",
       backgroundColor: "#f8fdf8",
